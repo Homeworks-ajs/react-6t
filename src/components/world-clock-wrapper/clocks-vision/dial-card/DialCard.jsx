@@ -2,35 +2,14 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import './DialCard.css';
 import Arrow from './arrow/Arrow';
-import moment, { tz } from 'moment-timezone';
-
+import { getDateWithOffset, getDialArrowData } from './dateFunctions';
 
 function DialCard({ onRemove, id, clockTitle, timeZone }) {
-
-  const getDateWithOffset = (timeZone) => {
-    const gmtDate = moment.tz(Date.now(), "Etc/GMT+0");
-    const tzMS = timeZone * 60000;
-    return moment(gmtDate.unix()*1000 + tzMS)
-  }
-  console.log(getDateWithOffset(timeZone))
-
-  let day = new Date();
-  const DEG = 6;
-
-  const [state, setState] = useState({
-    hh: day.getHours() * 30,
-    mm: day.getMinutes() * DEG,
-    ss: day.getSeconds() * DEG
-  });
+  const [state, setState] = useState(getDialArrowData(getDateWithOffset(timeZone)));
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const day = new Date();
-      setState({
-        hh: day.getHours() * 30,
-        mm: day.getMinutes() * DEG,
-        ss: day.getSeconds() * DEG
-      })
+      setState(getDialArrowData(getDateWithOffset(timeZone)))
     }, 1000)
     return () => clearInterval(interval);
   }, [])
@@ -38,10 +17,10 @@ function DialCard({ onRemove, id, clockTitle, timeZone }) {
   return (
     <div className="card clock-block w-25 mx-1 rounded-3 bg-light shadow ">
       <div className="meta-wrapper d-flex flex-column">
-        <button type="button" class="btn p-0 align-self-end"
+        <button type="button" className="btn p-0 align-self-end"
           style={{ width: "10%" }} onClick={onRemove} data-id={id}>&#10060;</button>
-        <h5 class="card-title px-1 py-1 text-center">{clockTitle}</h5></div>
-      <div class="card-body d-flex justify-content-center">
+        <h5 className="card-title px-1 py-1 text-center">{clockTitle}</h5></div>
+      <div className="card-body d-flex justify-content-center">
         <div className="clock">
           <Arrow type={"hour"} name={"hr"} transform={`rotateZ(${(state.hh) + (state.mm / 12)}deg)`} />
           <Arrow type={"min"} name={"mn"} transform={`rotateZ(${state.mm}deg)`} />

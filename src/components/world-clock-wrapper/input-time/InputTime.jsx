@@ -13,7 +13,7 @@ function InputTime({ onAppend }) {
         <input type="number" name='time_zone' max={14} min={-11} defaultValue={0} required/>
       </div>
       <div className="col d-flex align-items-end">
-        <button type="button" class="btn btn-outline-secondary" onClick={onAppend}>Добавить</button>
+        <button type="button" className="btn btn-outline-secondary" onClick={onAppend}>Добавить</button>
       </div>
     </form>
   )

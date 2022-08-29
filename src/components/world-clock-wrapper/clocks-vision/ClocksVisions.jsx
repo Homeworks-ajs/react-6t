@@ -18,7 +18,7 @@ ClocksVisions.propTypes = {
       timeZone: PropTypes.number.isRequired
     })
   ),
-  onRemove: PropTypes.number.isRequired
+  onRemove: PropTypes.func.isRequired
 }
 
 export default ClocksVisions
