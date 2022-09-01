@@ -1,25 +1,31 @@
 const express = require('express')
 const app = express()
+const shortid = require('shortid')
+require('dotenv').config();
 const cors = require('cors');
-const port = 3000;
+const port = process.env.SERVER_PORT;
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.raw());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors());
 
-const allNotes = [{
-  id: 0,
-  text: "orem10"
-}];
+let allNotes = [];
 
-var corsOptions = {
-  origin: "*",
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-
-app.get('/notes', cors(corsOptions), (req, res) => {
+app.get('/notes', (req, res) => {
   res.send(allNotes)
-  // console.log(allNotes)
 })
 
-app.get('/notes/:id', cors(corsOptions), (req, res) => {
-  console.log(req.params)
+app.post('/notes', (req, res) => {
+  allNotes.push({id: shortid.generate(), ...req.body })
+  console.log(req.body)
+  res.sendStatus(200);
+})
+
+app.delete('/notes/:id', (req, res) => {
+  const removingId = req.params.id;
+  allNotes = allNotes.filter(({id}) => id !== removingId)
+  res.sendStatus(200);
 })
 
 app.listen(port, () => {
